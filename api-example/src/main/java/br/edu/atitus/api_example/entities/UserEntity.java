@@ -4,17 +4,34 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class UserEntity {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "tb_user")
+public class UserEntity {
+		
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
+	@Column(length = 100, nullable = false)
 	private String name;
 	
 	private String email;
 	
 	@JsonIgnore
-	private String passwaord;
+	@Column(length = 100, nullable = false)
+	private String password;
 	
+	@Enumerated(EnumType.ORDINAL)
 	private TypeUser type;
 
 	public UUID getId() {
@@ -41,12 +58,12 @@ public class UserEntity {
 		this.email = email;
 	}
 
-	public String getPasswaord() {
-		return passwaord;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPasswaord(String passwaord) {
-		this.passwaord = passwaord;
+	public void setPassword(String passwaord) {
+		this.password = passwaord;
 	}
 
 	public TypeUser getType() {

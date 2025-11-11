@@ -1,9 +1,23 @@
 package br.edu.atitus.api_example.services;
 
-import br.edu.atitus.api_example.entities.UserEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.edu.atitus.api_example.entities.UserEntity;
+import br.edu.atitus.api_example.repositories.UserRepository;
+
+@Service
 public class UserService {
 	
+	private final UserRepository repository;
+	
+	public UserService(UserRepository repository) {
+		super();
+		this.repository = repository;
+	}
+
+
 	public UserEntity save(UserEntity user) throws Exception{
 		if (user == null)
 			throw new Exception("Objeto Nulo");
@@ -18,9 +32,9 @@ public class UserService {
 			throw new Exception("Nome invaldio");
 		user.setEmail(user.getEmail().trim());
 		
-		if (user.getPasswaord() == null
-				|| user.getPasswaord().isEmpty()
-				|| user.getPasswaord().length()< 8)
+		if (user.getPassword() == null
+				|| user.getPassword().isEmpty()
+				|| user.getPassword().length()< 8)
 			throw new Exception("Password invalido");
 		
 		//TODO criar hash da senha
@@ -28,9 +42,11 @@ public class UserService {
 		//TODO validar permissão cadastro Admins
 		
 		
-		//TODO enviar para a camada repository 
+		repository.save(user);
+		
 		return user;
 		
 	}
-
+	
+	
 }
