@@ -62,8 +62,8 @@ public class UserEntity {
 		return password;
 	}
 
-	public void setPassword(String passwaord) {
-		this.password = passwaord;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public TypeUser getType() {

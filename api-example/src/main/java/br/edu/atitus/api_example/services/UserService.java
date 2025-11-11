@@ -1,6 +1,7 @@
 package br.edu.atitus.api_example.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -11,10 +12,12 @@ import br.edu.atitus.api_example.repositories.UserRepository;
 public class UserService {
 	
 	private final UserRepository repository;
+	private final PasswordEncoder encoder;
 	
-	public UserService(UserRepository repository) {
+	public UserService(UserRepository repository, PasswordEncoder encoder) {
 		super();
 		this.repository = repository;
+		this.encoder = encoder;
 	}
 
 
@@ -37,9 +40,11 @@ public class UserService {
 				|| user.getPassword().length()< 8)
 			throw new Exception("Password invalido");
 		
-		//TODO criar hash da senha
+		user.setPassword(encoder.encode(user.getPassword()));
 		
-		//TODO validar permissão cadastro Admins
+		if (repository.existsByEmail(user.getEmail()))
+			throw new Exception("já existe usuario cadastrado com este e-mail");
+		
 		
 		
 		repository.save(user);
